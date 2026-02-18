@@ -37,6 +37,8 @@ const Footer = () => {
             <div className="text-sm space-y-2">
               <p className="text-gray-600">06.07.65.10.50</p>
               <p className="text-gray-600">tunzikprod@gmail.com</p>
+              <li className="text-gray-600 list-none"><Link to="/condition-generales">Conditions générales</Link></li>
+              <li className="text-gray-600 list-none"><Link to="/politique-de-confidentialite">Politique de confidentialité</Link></li>
             </div>
           </div>
         </div>
