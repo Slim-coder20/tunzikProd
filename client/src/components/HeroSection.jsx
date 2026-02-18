@@ -1,5 +1,5 @@
 import React from "react";
-
+import { NavLink } from "react-router-dom";
 const HeroSection = () => {
   return (
     <section className="flex flex-col max-md:gap-12 md:flex-row pb-20 items-center justify-between mt-10 px-4 md:px-16 lg:px-24 xl:px-32">
@@ -18,12 +18,18 @@ const HeroSection = () => {
 
         {/* Double CTA pour l'UX */}
         <div className="flex flex-col sm:flex-row items-center gap-4 mt-10 w-full md:w-auto">
-          <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-medium active:scale-95 transition-all rounded-full px-8 h-12 shadow-lg shadow-blue-500/20 cursor-pointer">
-            Devenir Adhérent
-          </button>
-          <button className="w-full sm:w-auto px-8 h-12 rounded-full border border-slate-700 text-slate-300 font-medium bg-transparent hover:bg-slate-700/50 hover:text-white hover:border-slate-400 transition-all duration-300 active:scale-95 cursor-pointer">
-            Explorer le Label
-          </button>
+          <NavLink
+            to="/adhesion"
+            className="flex items-center justify-center w-full sm:w-auto h-12 rounded-full px-8 bg-blue-600 hover:bg-blue-500 text-white font-medium active:scale-95 transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+          >
+            <span>Devenir Adhérent</span>
+          </NavLink>
+          <NavLink
+            to="/label"
+            className="flex items-center justify-center w-full sm:w-auto h-12 rounded-full px-8 border border-slate-700 text-slate-300 font-medium bg-transparent hover:bg-slate-700/50 hover:text-white hover:border-slate-400 transition-all duration-300 active:scale-95 cursor-pointer"
+          >
+            <span>Explorer le Label</span>
+          </NavLink>
         </div>
       </div>
 
