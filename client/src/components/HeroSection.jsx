@@ -2,15 +2,15 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 const HeroSection = () => {
   return (
-    <section className="flex flex-col max-md:gap-12 md:flex-row pb-20 items-center justify-between mt-10 px-4 md:px-16 lg:px-24 xl:px-32">
+    <section className="flex flex-col bg-slate-900 max-md:gap-12 md:flex-row pb-20 items-center justify-between pt-6 px-4 md:px-16 lg:px-24 xl:px-32">
       <div className="flex flex-col items-center md:items-start text-white">
         {/* H1 Percutant */}
-        <h1 className="text-center md:text-left text-5xl leading-tight md:text-7xl md:leading-[1.1] font-bold max-w-2xl text-gray-700">
+        <h1 className="text-center md:text-left text-5xl leading-tight md:text-7xl md:leading-[1.1] font-bold max-w-2xl text-white">
           Propulser la scène <span className="text-blue-500">émergente.</span>
         </h1>
 
         {/* Ton paragraphe sur Tunzik */} 
-        <p className="text-center md:text-left text-base md:text-lg text-slate-400 max-w-lg mt-6 leading-relaxed">
+        <p className="text-center md:text-left text-base md:text-lg text-white  max-w-lg mt-6 leading-relaxed">
           Tunzik Production accompagne les talents de demain, de la création
           scénique à la production d'albums. Ensemble, faisons vibrer le
           spectacle vivant.
@@ -35,11 +35,11 @@ const HeroSection = () => {
 
       {/* Image Hero - On peut ajouter un petit effet de lueur derrière */}
       <div className="relative group">
-        <div className="absolute -inset-1 bg-blue-500 rounded-full blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
+        <div className="absolute rounded-full  group-hover:opacity-20 transition duration-1000"></div>
         <img
           src="../public/heroSection/heroSection.jpeg"
           alt="Tunzik Showcase"
-          className="relative max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg drop-shadow-2xl rounded-lg"
+          className="relative max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg  rounded-lg mt-7"
         />
       </div>
     </section>
