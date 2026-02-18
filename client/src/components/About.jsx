@@ -1,4 +1,5 @@
 import { Music2, Disc3, Sparkles, Award, Users2, BadgeCheck } from "lucide-react";
+import { NavLink } from "react-router-dom"; 
 
 export default function About() {
   const values = [
@@ -44,28 +45,38 @@ export default function About() {
     <section className="relative bg-slate-900 max-w-full mx-auto px-4 md:px-8 py-16 md:py-24">
       <div className="size-[520px] -top-80 left-1/2 -translate-x-1/2 rounded-full absolute blur-[300px] -z-10 bg-blue-500/10" />
       <div className="relative max-w-5xl mx-auto">
-      <h2 className="text-3xl font-semibold text-center text-slate-100">
-        Nos valeurs
-      </h2>
-      <p className="text-sm text-slate-400 text-center mt-2 max-w-lg mx-auto">
-        Tunzik Production place l'artiste et le spectacle vivant au centre. Nos
-        valeurs guident chaque projet que nous accompagnons.
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 pt-16">
-        {values.map(({ icon: Icon, title, description }) => (
-          <div key={title} className="space-y-4">
-            <div className="flex size-11 items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-blue-400">
-              <Icon size={22} strokeWidth={1.8} />
+        <h2 className="text-3xl font-semibold text-center text-slate-100">
+          Nos valeurs
+        </h2>
+        <p className="text-sm text-slate-400 text-center mt-2 max-w-lg mx-auto">
+          Tunzik Production place l'artiste et le spectacle vivant au centre.
+          Nos valeurs guident chaque projet que nous accompagnons.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-12 pt-16">
+          {values.map(({ icon: Icon, title, description }) => (
+            <div key={title} className="space-y-4">
+              <div className="flex size-11 items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-blue-400">
+                <Icon size={22} strokeWidth={1.8} />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-base font-medium text-slate-200">
+                  {title}
+                </h3>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  {description}
+                </p>
+              </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-base font-medium text-slate-200">{title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
-                {description}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10 w-full md:w-auto">
+          <NavLink
+            to="/adhesion"
+            className="flex items-center justify-center w-full sm:w-auto h-12 rounded-full px-8 bg-blue-600 hover:bg-blue-500 text-white font-medium active:scale-95 transition-all shadow-lg shadow-blue-500/20 cursor-pointer"
+          >
+            <span>Devenir Adhérent</span>
+          </NavLink>
+        </div>
       </div>
     </section>
   );
