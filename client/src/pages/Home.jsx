@@ -1,8 +1,8 @@
-import React from 'react'
-
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div>
+      {/* Contenu de la page d'accueil */}
+    </div>
   )
 }
 
