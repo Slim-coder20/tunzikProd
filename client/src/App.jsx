@@ -6,6 +6,7 @@ import Artistes from "./pages/Artistes"
 import Label from "./pages/Label"
 import Adhesion from "./pages/Adhesion"
 import Contact from "./pages/Contact"
+import About from "./pages/About"
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/label" element={<Label />} />
           <Route path="/adhesion" element={<Adhesion />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/a-propos" element={<About />} />
         </Routes>
       </main>
       <Footer />
