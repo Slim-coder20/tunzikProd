@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env
+
+# Fichiers audio lourds (> 100 Mo GitHub) — héberger ailleurs ou utiliser des MP3
+public/audio/*.wav

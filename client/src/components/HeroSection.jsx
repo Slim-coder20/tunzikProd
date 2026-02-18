@@ -6,10 +6,10 @@ const HeroSection = () => {
       <div className="flex flex-col items-center md:items-start text-white">
         {/* H1 Percutant */}
         <h1 className="text-center md:text-left text-5xl leading-tight md:text-7xl md:leading-[1.1] font-bold max-w-2xl text-gray-700">
-          Propulsez la scène <span className="text-blue-500">émergente.</span>
+          Propulser la scène <span className="text-blue-500">émergente.</span>
         </h1>
 
-        {/* Ton paragraphe sur Tunzik */}
+        {/* Ton paragraphe sur Tunzik */} 
         <p className="text-center md:text-left text-base md:text-lg text-slate-400 max-w-lg mt-6 leading-relaxed">
           Tunzik Production accompagne les talents de demain, de la création
           scénique à la production d'albums. Ensemble, faisons vibrer le

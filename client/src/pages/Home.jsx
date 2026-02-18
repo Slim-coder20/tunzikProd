@@ -1,11 +1,11 @@
 import HeroSection from "../components/HeroSection"
-
+import LatestRelease from "../components/LatestRelease"
 const HomePage = () => {
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div >
       {/* Contenu de la page d'accueil */}
       <HeroSection/>
-      
+      <LatestRelease/>
     </div>  
   )
 }
