@@ -24,7 +24,7 @@ export default function NewLetter() {
         <div className="flex items-center justify-center mt-10 border border-slate-600 focus-within:outline focus-within:outline-indigo-600 text-sm rounded-full h-14 max-w-md w-full">
           <input
             {...register("email", { required: "Email est requis"})}
-            type="text"
+            type="email"
             className="bg-transparent outline-none rounded-full px-4 h-full flex-1"
             placeholder="Entrer votre email"
           />

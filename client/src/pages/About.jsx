@@ -66,7 +66,7 @@ export default function About() {
                 Notre mission
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                Soutenir les artistes locaux  à travers l'accompagnement, la production et la diffusion du
+                Soutenir les artistes locaux à travers l'accompagnement, la production et la diffusion du
                 spectacle vivant.
               </p>
             </div>

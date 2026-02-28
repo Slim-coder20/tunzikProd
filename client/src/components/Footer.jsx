@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="px-6 pt-8 md:px-16 lg:px-36 w-full text-gray-300">
       <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10">
         <div className="md:max-w-96">
-          <img alt="" class="w-30 h-30" src="../favicon.png" />
+          <img alt="Tunzik Production" className="w-30 h-30" src="/favicon.png" />
           <p className="mt-6 text-gray-700">Tunzik Production</p>
         </div>
         <div className="flex-1 flex items-start md:justify-end gap-20 md:gap-40">

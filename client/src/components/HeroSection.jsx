@@ -37,7 +37,7 @@ const HeroSection = () => {
       <div className="relative group">
         <div className="absolute rounded-full  group-hover:opacity-20 transition duration-1000"></div>
         <img
-          src="../public/heroSection/heroSection.jpeg"
+          src="/heroSection/heroSection.jpeg"
           alt="Tunzik Showcase"
           className="relative max-w-xs sm:max-w-sm lg:max-w-md xl:max-w-lg  rounded-lg mt-7"
         />

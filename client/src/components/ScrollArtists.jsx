@@ -7,27 +7,27 @@ export default function ScrollArtists() {
       title: "Fréquences Basses",
       artist: "Slim Abida",
       image:
-        "../public/latestRelease/cover-frequenceBasses.png",
+        "/latestRelease/cover-frequenceBasses.png",
     },
     {
       title: "Asymetrie",
       artist: "Slim Abida",
-      image:"../public/latestRelease/cover-asymetrie.jpeg",
+      image:"/latestRelease/cover-asymetrie.jpeg",
     },
     {
       title: "Vers où",
       artist: "Jazz Oil",
-      image:"../public/latestRelease/cover-versOuSingle.jpg",
+      image:"/latestRelease/cover-versOuSingle.jpg",
     },
     {
       title: "Lamma",
       artist: "Jazz Oil",
-      image:"../public/latestRelease/cover-jazzoil-lamma.jpeg",
+      image:"/latestRelease/cover-jazzoil-lamma.jpeg",
     },
     {
       title: "The Beginnings",
       artist: "Slim Abida",
-      image:"../public/latestRelease/cover-contrast.jpeg",
+      image:"/latestRelease/cover-contrast.jpeg",
     },
   ];
 
@@ -71,7 +71,7 @@ export default function ScrollArtists() {
                 <img
                   src={card.image}
                   alt="card"
-                  className="w-80 h-80object-cover mt-10 cursor-pointer"
+                  className="w-full h-80 object-cover mt-10 cursor-pointer"
                 />
                 <div className="flex flex-col items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-0 backdrop-blur-md left-0 w-full h-full bg-black/20">
                     <p className="text-white text-lg font-semibold text-center">
