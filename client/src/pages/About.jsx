@@ -39,8 +39,7 @@ export default function About() {
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-500">
             Tunzik Production est une association d'aide au spectacle vivant qui
-            a pour but de soutenir les artistes locaux et de promouvoir la
-            culture dans toutes ces formes. Tunzik Production existe depuis 2017 et basé à Paris.
+            a pour but de soutenir les artistes. Tunzik Production existe depuis 2017 et basé à Paris.
           </p>
         </header>
 
@@ -67,8 +66,7 @@ export default function About() {
                 Notre mission
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                Soutenir les artistes locaux et promouvoir la culture locale à
-                travers l'accompagnement, la production et la diffusion du
+                Soutenir les artistes locaux  à travers l'accompagnement, la production et la diffusion du
                 spectacle vivant.
               </p>
             </div>

@@ -1,38 +1,12 @@
 import { useState, useRef } from "react";
 import { Facebook, Instagram, Youtube } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { artistes } from "../data/artistes";
 
 const socialLinksConfig = [
   { icon: Facebook, label: "Facebook" },
   { icon: Instagram, label: "Instagram" },
   { icon: Youtube, label: "YouTube" },
-];
-
-const artistes = [
-  {
-    id: 1,
-    name: "Slim Abida",
-    image: "/artistes/slimabida.png",
-    bio: "Bassiste, compositeur et architecte sonore, Slim Abida s'est imposé en une décennie comme une figure incontournable du Jazz-Fusion contemporain en France. Avec quatre albums à son actif (dont le très attendu Contrast), il déconstruit les genres pour bâtir une musique électrique, nerveuse et profondément cinématographiqu",
-    socialLinks: [
-      { href: "https://www.facebook.com/slimabidaproject/", label: "Facebook" },
-      {
-        href: "https://www.instagram.com/slimabidaproject/",
-        label: "Instagram",
-      },
-      { href: "https://www.youtube.com/@slimabida6045", label: "YouTube" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Jazz Oil",
-    image: "/artistes/jazzoilband.jpeg",
-    bio: "Le groupe a été fondé à Tunis en 2008 autour d’un duo inattendu d’instruments : la basse et le Quanun un voyage sonore entre l'orient et l'occident",
-    socialLinks: [
-      { href: "https://www.facebook.com/jazzoil.fr/?locale=fr_FR", label: "Facebook" },
-      { href: "https://www.instagram.com/jazzoil/?hl=fr", label: "Instagram" },
-      { href: "https://www.youtube.com/@jazzoil4455", label: "YouTube" },
-    ],
-  },
 ];
 
 function ArtistCard({ artist }) {
@@ -48,69 +22,72 @@ function ArtistCard({ artist }) {
   };
 
   return (
-    <div
-      ref={divRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-      className="relative min-h-96 w-80 overflow-hidden rounded-xl bg-white p-0.5 text-gray-800 shadow-lg shadow-slate-200/60 backdrop-blur-md cursor-pointer transition hover:shadow-xl"
-    >
-      {visible && (
-        <div
-          className="pointer-events-none absolute z-0 size-60 blur-xl transition-opacity duration-300"
-          style={{
-            top: position.y - 120,
-            left: position.x - 120,
-            background:
-              "linear-gradient(to right, rgb(96 165 250), rgb(99 102 241))",
-          }}
-        />
-      )}
-
-      <div className="relative z-10 flex h-full min-h-96 w-full flex-col items-center rounded-[10px] bg-white p-6 text-center">
-        <div className="shrink-0">
-          <img
-            src={artist.image}
-            alt={artist.name}
-            className="h-24 w-24 rounded-full border-2 border-slate-100 object-cover shadow-md"
+    <NavLink to={`/artistes/${artist.id}`}>
+      <div
+        ref={divRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+        className="relative min-h-96 w-80 overflow-hidden rounded-xl bg-white p-0.5 text-gray-800 shadow-lg shadow-slate-200/60 backdrop-blur-md cursor-pointer transition hover:shadow-xl"
+      >
+        {visible && (
+          <div
+            className="pointer-events-none absolute z-0 size-60 blur-xl transition-opacity duration-300"
+            style={{
+              top: position.y - 120,
+              left: position.x - 120,
+              background:
+                "linear-gradient(to right, rgb(96 165 250), rgb(99 102 241))",
+            }}
           />
-        </div>
-        <h2 className="mt-4 mb-2 shrink-0 text-2xl font-bold text-gray-800">
-          {artist.name}
-        </h2>
-        {artist.bio ? (
-          <p
-            className="mb-4 min-w-0 flex-1 px-2 text-sm leading-relaxed text-gray-500 line-clamp-4"
-            title={artist.bio}
-          >
-            {artist.bio}
-          </p>
-        ) : (
-          <div className="min-h-18 flex-1" />
         )}
-        <div className="mt-auto flex shrink-0 items-center justify-center gap-4 pt-4">
-          {artist.socialLinks.map((link, index) => {
-            const config = socialLinksConfig.find(
-              (c) => c.label === link.label,
-            );
-            const Icon = config?.icon;
-            if (!Icon) return null;
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={link.label}
-                className="rounded-full p-2 text-indigo-600 transition hover:-translate-y-0.5 hover:bg-indigo-50 hover:text-indigo-700"
-              >
-                <Icon className="size-6" strokeWidth={1.8} />
-              </a>
-            );
-          })}
+
+        <div className="relative z-10 flex h-full min-h-96 w-full flex-col items-center rounded-[10px] bg-white p-6 text-center">
+          <div className="shrink-0">
+            <img
+              src={artist.image}
+              alt={artist.name}
+              className="h-24 w-24 rounded-full border-2 border-slate-100 object-cover shadow-md"
+            />
+          </div>
+          <h2 className="mt-4 mb-2 shrink-0 text-2xl font-bold text-gray-800">
+            {artist.name}
+          </h2>
+          {artist.bio ? (
+            <p
+              className="mb-4 min-w-0 flex-1 px-2 text-sm leading-relaxed text-gray-500 line-clamp-4"
+              title={artist.bio}
+            >
+              {artist.bio}
+            </p>
+          ) : (
+            <div className="min-h-18 flex-1" />
+          )}
+          <div className="mt-auto flex shrink-0 items-center justify-center gap-4 pt-4">
+            {artist.socialLinks.map((link, index) => {
+              const config = socialLinksConfig.find(
+                (c) => c.label === link.label,
+              );
+              const Icon = config?.icon;
+              if (!Icon) return null;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  onClick={(e) => e.stopPropagation()}
+                  className="rounded-full p-2 text-indigo-600 transition hover:-translate-y-0.5 hover:bg-indigo-50 hover:text-indigo-700"
+                >
+                  <Icon className="size-6" strokeWidth={1.8} />
+                </a>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </NavLink>
   );
 }
 

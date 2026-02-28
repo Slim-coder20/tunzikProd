@@ -1,7 +1,9 @@
+import ProductCard from "../components/ProductCard"
 export default function Label() {
   return (
-    <div>
+    <div className="">
       {/* Contenu de la page Label */}
+      <ProductCard />
     </div>
   )
 }

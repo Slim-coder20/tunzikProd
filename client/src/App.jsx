@@ -7,7 +7,7 @@ import Label from "./pages/Label"
 import Adhesion from "./pages/Adhesion"
 import Contact from "./pages/Contact"
 import About from "./pages/About"
-
+import ArtistDetails from "./pages/ArtistDetails"
 function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -16,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/artistes" element={<Artistes />} />
+          <Route path="/artistes/:id" element={<ArtistDetails />} />
           <Route path="/label" element={<Label />} />
           <Route path="/adhesion" element={<Adhesion />} />
           <Route path="/contact" element={<Contact />} />
