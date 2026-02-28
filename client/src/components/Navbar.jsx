@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ShoppingBag, Globe } from 'lucide-react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
+  const navigate = useNavigate();
 
   const navLinks = [
     { name: 'Accueil', path: '/' },
@@ -87,8 +88,9 @@ const Navbar = () => {
             </button>
             <button
               type="button"
+              onClick={() => navigate('/cart')}
               className="relative rounded-full p-2.5 text-slate-400 transition hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-              aria-label={`Boutique${cartCount > 0 ? ` (${cartCount} article${cartCount > 1 ? 's' : ''})` : ''}`}
+              aria-label={`Panier${cartCount > 0 ? ` (${cartCount} article${cartCount > 1 ? 's' : ''})` : ''}`}
             >
               <ShoppingBag size={20} strokeWidth={1.8} />
               {cartCount > 0 && (
@@ -155,11 +157,12 @@ const Navbar = () => {
             </button>
             <button
               type="button"
+              onClick={() => { navigate('/cart'); setIsOpen(false); }}
               className="relative flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-slate-400 transition hover:bg-slate-700/50 hover:text-white"
-              aria-label="Boutique"
+              aria-label="Panier"
             >
               <ShoppingBag size={20} />
-              <span className="text-sm">Boutique</span>
+              <span className="text-sm">Panier</span>
               {cartCount > 0 && (
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
                   {cartCount > 9 ? '9+' : cartCount}

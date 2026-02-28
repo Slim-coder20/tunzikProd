@@ -8,6 +8,7 @@ import Adhesion from "./pages/Adhesion"
 import Contact from "./pages/Contact"
 import About from "./pages/About"
 import ArtistDetails from "./pages/ArtistDetails"
+import Cart from "./pages/Cart"
 function App() {
   return (
     <div className="flex min-h-screen flex-col">
@@ -21,6 +22,7 @@ function App() {
           <Route path="/adhesion" element={<Adhesion />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/a-propos" element={<About />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </main>
       <Footer />

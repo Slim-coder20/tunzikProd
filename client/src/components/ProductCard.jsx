@@ -1,53 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-
-const albums = [
-  {
-    id: 1,
-    title: "Asymetrie",
-    artist: "Slim Abida",
-    description: "Asymetrie de Slim Abida sortie le 27/05/2022",
-    image: "/latestRelease/cover-asymetrie.jpeg",
-    price: "15€",
-    isFree: false,
-  },
-  {
-    id: 2,
-    title: "Fréquences Basses",
-    artist: "Slim Abida",
-    description: "Fréquences Basses de Slim Abida sortie le 21/02/2020",
-    image: "/latestRelease/cover-frequenceBasses.png",
-    price: "15€",
-    isFree: false,
-  },
-  {
-    id: 3,
-    title: "Lamma",
-    artist: "Jazz Oil",
-    description: "Lamma de Jazz Oil sortie le 25/03/2016",
-    image: "/latestRelease/cover-jazzoil-lamma.jpeg",
-    price: "15€",
-    isFree: false,
-  },
-  {
-    id: 4,
-    title: "Vers où",
-    artist: "Jazz Oil",
-    description: "Single de Jazz Oil sortie le 21/12/2024",
-    image: "/latestRelease/cover-versOuSingle.jpg",
-    price: "Gratuit",
-    isFree: true,
-  },
-  {
-    id: 5,
-    title: "The Beginings",
-    artist: "Slim Abida",
-    description: "Nouveau Single bientôt disponible",
-    image: "/latestRelease/cover-contrast.jpeg",
-    price: "Gratuit",
-    isFree: true,
-  },
-];
+import { albums } from "../data/albums";
 
 export default function ProductCard() {
   const { addToCart, cartItems } = useCart();
@@ -55,7 +8,7 @@ export default function ProductCard() {
 
   const handleBuyNow = (album) => {
     addToCart(album.id);
-    navigate("/label");
+    navigate("/cart");
   };
 
   return (
