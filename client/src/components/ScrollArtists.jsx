@@ -54,7 +54,7 @@ export default function ScrollArtists() {
         onMouseEnter={() => setStopScroll(true)}
         onMouseLeave={() => setStopScroll(false)}
       >
-        <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-white to-transparent" />
+        <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-linear-to-r from-white to-transparent" />
         <div
           className="marquee-inner flex w-fit"
           style={{
@@ -71,7 +71,8 @@ export default function ScrollArtists() {
                 <img
                   src={card.image}
                   alt="card"
-                  className="w-full h-80 object-cover mt-10 cursor-pointer"
+                  className="w-full h-50 object-cover mt-10 cursor-pointer"
+                  
                 />
                 <div className="flex flex-col items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-all duration-300 absolute bottom-0 backdrop-blur-md left-0 w-full h-full bg-black/20">
                     <p className="text-white text-lg font-semibold text-center">
