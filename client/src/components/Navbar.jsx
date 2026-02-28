@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, ShoppingBag, Globe } from 'lucide-react';
 import { Link, NavLink } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { getCartCount } = useCart();
+  const cartCount = getCartCount();
 
   const navLinks = [
     { name: 'Accueil', path: '/' },
@@ -84,10 +87,15 @@ const Navbar = () => {
             </button>
             <button
               type="button"
-              className="rounded-full p-2.5 text-slate-400 transition hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-              aria-label="Boutique"
+              className="relative rounded-full p-2.5 text-slate-400 transition hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+              aria-label={`Boutique${cartCount > 0 ? ` (${cartCount} article${cartCount > 1 ? 's' : ''})` : ''}`}
             >
               <ShoppingBag size={20} strokeWidth={1.8} />
+              {cartCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -147,11 +155,16 @@ const Navbar = () => {
             </button>
             <button
               type="button"
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-slate-400 transition hover:bg-slate-700/50 hover:text-white"
+              className="relative flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-slate-400 transition hover:bg-slate-700/50 hover:text-white"
               aria-label="Boutique"
             >
               <ShoppingBag size={20} />
               <span className="text-sm">Boutique</span>
+              {cartCount > 0 && (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
