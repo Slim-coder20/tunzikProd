@@ -5,6 +5,8 @@ import cors from 'cors';
 import { connectMongo } from './DB/mongoDB.js';
 import contactRouter from './routes/contactRoute.js';
 import newsLetterRouter from './routes/newsLetterRoute.js';
+import artistesRouter from './routes/artistesRoute.js';
+import albumsRouter from './routes/albumsRoute.js';
 dotenv.config(); 
 
 /**
@@ -33,6 +35,8 @@ app.get("/", (req, res) => {
 })
 app.use('/api/contact', contactRouter);
 app.use('/api/newsletter', newsLetterRouter);
+app.use('/api/artistes', artistesRouter);
+app.use('/api/albums', albumsRouter);
 
 // Start the server 
 app.listen(process.env.PORT, "0.0.0.0", () => {
