@@ -1,6 +1,7 @@
 import transporter from "../config/email.js";
 import Contact from "../models/Contact.js";
 import { getUserEmailHtml } from "../template/contacUserTemplate.js";
+import { getContactAdminHtml } from "../template/contactAdminTemplate.js";
 
 // Contact form email handler : POST /api/contact //
 export const contact = async (req, res) => {
@@ -38,6 +39,17 @@ export const contact = async (req, res) => {
       subject: "✓ Message reçu - Tunzik Production",
       text: `Bonjour ${firstName}, merci de nous avoir contactés. Nous avons bien reçu votre message et vous répondrons dans les meilleurs délais. Cordialement, L'équipe Tunzik Production`,
       html: getUserEmailHtml(firstName.trim()),
+    });
+
+    // Copie du message envoyée à la boîte Tunzik (tunzikprod@gmail.com)
+    const contactEmail = process.env.CONTACT_EMAIL || "tunzikprod@gmail.com";
+    await transporter.sendMail({
+      from: `"${displayName}" <${senderEmail}>`,
+      to: contactEmail,
+      replyTo: email.trim(),
+      subject: `[Contact] Nouveau message de ${firstName} ${lastName}`,
+      text: `Prénom: ${firstName}\nNom: ${lastName}\nEmail: ${email}\n\nMessage:\n${content}`,
+      html: getContactAdminHtml(firstName.trim(), lastName.trim(), email.trim(), content),
     });
 
     return res.status(200).json({ message: "Message envoyé avec succès" });
