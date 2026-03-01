@@ -7,7 +7,8 @@ import contactRouter from './routes/contactRoute.js';
 import newsLetterRouter from './routes/newsLetterRoute.js';
 import artistesRouter from './routes/artistesRoute.js';
 import albumsRouter from './routes/albumsRoute.js';
-dotenv.config(); 
+import adhesionRouter from './routes/adhesionRoute.js';
+dotenv.config();
 
 /**
  * Initialize Express App
@@ -37,6 +38,7 @@ app.use('/api/contact', contactRouter);
 app.use('/api/newsletter', newsLetterRouter);
 app.use('/api/artistes', artistesRouter);
 app.use('/api/albums', albumsRouter);
+app.use('/api/adhesion', adhesionRouter);
 
 // Start the server 
 app.listen(process.env.PORT, "0.0.0.0", () => {
