@@ -1,18 +1,21 @@
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { newsLetterService } from "../services/newsLetterService.js";
+
 export default function NewLetter() {
-  // useForm pour gérer le formulaire de newsletter
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
-    defaultValues: {
-      email:"",
-    }
+    defaultValues: { email: "" },
   });
 
-  // handleSubmit pour gérer la soumission du formulaire
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Email enregistré avec succès");
-    reset();
+  const onSubmit = async (data) => {
+    try {
+      await newsLetterService.send(data);
+      toast.success("Inscription à la newsletter confirmée");
+      reset();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Erreur lors de l'inscription, réessayez.");
+    }
   };
   return (
     <>
