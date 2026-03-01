@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useParams, NavLink } from "react-router-dom";
 import { Facebook, Instagram, Youtube, ArrowLeft, Play, Pause, MapPin, Music } from "lucide-react";
-import { artistes } from "../data/artistes";
+import { artistesService } from "../services/artistesService";
 
 const socialLinksConfig = [
   { icon: Facebook, label: "Facebook" },
@@ -11,24 +11,41 @@ const socialLinksConfig = [
 
 const ArtistDetails = () => {
   const { id } = useParams();
+  const [artist, setArtist] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [playingId, setPlayingId] = useState(null);
   const audioRef = useRef(null);
 
-  const artist = artistes.find((a) => a.id === Number(id));
+  useEffect(() => {
+    artistesService
+      .getById(id)
+      .then((data) => setArtist(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   const togglePlay = (album) => {
     if (!album.previewUrl) return;
-    if (playingId === album.id) {
+    if (playingId === album._id) {
       audioRef.current.pause();
       setPlayingId(null);
     } else {
-      setPlayingId(album.id);
+      setPlayingId(album._id);
       audioRef.current.src = album.previewUrl;
       audioRef.current.play();
     }
   };
 
-  if (!artist) {
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500" />
+      </div>
+    );
+  }
+
+  if (error || !artist) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 text-center">
         <h1 className="text-3xl font-semibold text-slate-800">Artiste introuvable</h1>
@@ -125,7 +142,7 @@ const ArtistDetails = () => {
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {artist.albums.map((album) => (
-                <div key={album.id} className="group cursor-pointer">
+                <div key={album._id} className="group cursor-pointer">
                   <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100 shadow-sm">
                     <img
                       src={album.image}
@@ -136,13 +153,13 @@ const ArtistDetails = () => {
                       <div
                         onClick={() => togglePlay(album)}
                         className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity ${
-                          playingId === album.id
+                          playingId === album._id
                             ? "opacity-100"
                             : "opacity-0 group-hover:opacity-100"
                         }`}
                       >
                         <div className="rounded-full bg-white p-4 text-blue-600 shadow-lg">
-                          {playingId === album.id ? (
+                          {playingId === album._id ? (
                             <Pause fill="currentColor" size={22} />
                           ) : (
                             <Play fill="currentColor" size={22} />

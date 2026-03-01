@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Facebook, Instagram, Youtube } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { artistes } from "../data/artistes";
+import { artistesService } from "../services/artistesService";
 
 const socialLinksConfig = [
   { icon: Facebook, label: "Facebook" },
@@ -22,7 +22,7 @@ function ArtistCard({ artist }) {
   };
 
   return (
-    <NavLink to={`/artistes/${artist.id}`}>
+    <NavLink to={`/artistes/${artist._id}`}>
       <div
         ref={divRef}
         onMouseMove={handleMouseMove}
@@ -64,7 +64,7 @@ function ArtistCard({ artist }) {
             <div className="min-h-18 flex-1" />
           )}
           <div className="mt-auto flex shrink-0 items-center justify-center gap-4 pt-4">
-            {artist.socialLinks.map((link, index) => {
+            {artist.socialLinks.map((link) => {
               const config = socialLinksConfig.find(
                 (c) => c.label === link.label,
               );
@@ -92,6 +92,18 @@ function ArtistCard({ artist }) {
 }
 
 const Artistes = () => {
+  const [artistes, setArtistes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    artistesService
+      .getAll()
+      .then((data) => setArtistes(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50/50">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-16">
@@ -99,11 +111,23 @@ const Artistes = () => {
           Nos Artistes
         </h1>
 
-        <div className="grid grid-cols-1 place-items-center gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {artistes.map((artist) => (
-            <ArtistCard key={artist.id} artist={artist} />
-          ))}
-        </div>
+        {loading && (
+          <div className="flex justify-center py-20">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500" />
+          </div>
+        )}
+
+        {error && (
+          <p className="text-center text-sm text-red-500">{error}</p>
+        )}
+
+        {!loading && !error && (
+          <div className="grid grid-cols-1 place-items-center gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {artistes.map((artist) => (
+              <ArtistCard key={artist._id} artist={artist} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
