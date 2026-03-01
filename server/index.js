@@ -2,7 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv'; 
 import mongoose from 'mongoose'; 
 import cors from 'cors'; 
-import { connectMongo } from './DB/mongoDB.js';   
+import { connectMongo } from './DB/mongoDB.js';
+import contactRouter from './routes/contactRoute.js';  
 dotenv.config(); 
 
 /**
@@ -29,6 +30,7 @@ connectMongo();
 app.get("/", (req, res) => {
   res.send("Tunzik Production Welcome Page")
 })
+app.use('/api/contact', contactRouter); 
 
 // Start the server 
 app.listen(process.env.PORT, "0.0.0.0", () => {

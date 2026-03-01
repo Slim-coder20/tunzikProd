@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { contactService } from "../services/contactService.js";
+
 const Contact = () => {
   const navigate = useNavigate();
   const {
@@ -17,14 +19,17 @@ const Contact = () => {
       message: "",
     },
   });
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Message envoyé avec succès");
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-   reset();
-   
+
+  const onSubmit = async (data) => {
+    try {
+      await contactService.send(data);
+      toast.success("Message envoyé avec succès");
+      reset();
+      setTimeout(() => navigate("/"), 3000);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Erreur réseau, veuillez réessayer.");
+    }
   };
   return (
     <div>
