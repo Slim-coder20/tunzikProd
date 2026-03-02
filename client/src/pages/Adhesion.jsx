@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Users2, Sparkles, Mic2 } from "lucide-react";
+import { adhesionService } from "../services/adhesionService.js";
 
 const avantages = [
   {
@@ -26,28 +27,49 @@ const Adhesion = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm({
     defaultValues: {
-      firstname: "",
-      lastname: "",
+      firstName: "",
+      lastName: "",
       email: "",
       phone: "",
       address: "",
-      postalCode: "",
+      zip: "",
       city: "",
+      typeOfAdhesion: "",
+      paymentMethod: "",
+      amount: 30,
       terms: false,
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    toast.success("Demande d'adhésion envoyée !");
-    reset();
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+  const onSubmit = async (data) => {
+    try {
+      // Ne pas envoyer "terms" à l'API : le backend attend seulement ces champs
+      const payload = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone.replace(/\s/g, ""),
+        address: data.address,
+        city: data.city,
+        zip: data.zip,
+        typeOfAdhesion: data.typeOfAdhesion,
+        amount: Number(data.amount),
+        paymentMethod: data.paymentMethod,
+      };
+
+      await adhesionService.createAdhesion(payload);
+
+      toast.success("Demande d'adhésion envoyée !");
+      reset();
+      setTimeout(() => navigate("/"), 3000);
+    } catch (err) {
+      const message = err.message || "Erreur lors de l'envoi de l'adhésion.";
+      toast.error(message);
+    }
   };
 
   return (
@@ -86,13 +108,13 @@ const Adhesion = () => {
                   </label>
                   <input
                     type="text"
-                    {...register("firstname", { required: "Prénom requis" })}
+                    {...register("firstName", { required: "Prénom requis" })}
                     placeholder="David"
                     className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
                   />
-                  {errors.firstname && (
+                  {errors.firstName && (
                     <p className="mt-1 pl-1 text-left text-xs text-red-500">
-                      {errors.firstname.message}
+                      {errors.firstName.message}
                     </p>
                   )}
                 </div>
@@ -102,13 +124,13 @@ const Adhesion = () => {
                   </label>
                   <input
                     type="text"
-                    {...register("lastname", { required: "Nom requis" })}
+                    {...register("lastName", { required: "Nom requis" })}
                     placeholder="Dupont"
                     className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
                   />
-                  {errors.lastname && (
+                  {errors.lastName && (
                     <p className="mt-1 pl-1 text-left text-xs text-red-500">
-                      {errors.lastname.message}
+                      {errors.lastName.message}
                     </p>
                   )}
                 </div>
@@ -152,11 +174,11 @@ const Adhesion = () => {
                     {...register("phone", {
                       required: "Numéro de téléphone requis",
                       pattern: {
-                        value: /^[0-9\s\+\-]{6,15}$/,
-                        message: "Numéro invalide",
+                        value: /^[0-9]{10}$/,
+                        message: "10 chiffres requis (sans espace ni préfixe)",
                       },
                     })}
-                    placeholder="+33 6 12 34 56 78"
+                    placeholder="612345678"
                     className="flex-1 px-3 py-3 text-sm outline-none"
                   />
                 </div>
@@ -193,19 +215,19 @@ const Adhesion = () => {
                   </label>
                   <input
                     type="text"
-                    {...register("postalCode", {
+                    {...register("zip", {
                       required: "Code postal requis",
                       pattern: {
                         value: /^\d{5}$/,
-                        message: "Code postal invalide",
+                        message: "Code postal invalide (5 chiffres)",
                       },
                     })}
                     placeholder="75001"
                     className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
                   />
-                  {errors.postalCode && (
+                  {errors.zip && (
                     <p className="mt-1 pl-1 text-left text-xs text-red-500">
-                      {errors.postalCode.message}
+                      {errors.zip.message}
                     </p>
                   )}
                 </div>
@@ -225,6 +247,80 @@ const Adhesion = () => {
                     </p>
                   )}
                 </div>
+              </div>
+
+              {/* Type d'adhésion */}
+              <div className="mb-5">
+                <label className="mb-2 block text-sm text-gray-500">
+                  Type d'adhésion
+                </label>
+                <select
+                  {...register("typeOfAdhesion", {
+                    required: "Veuillez choisir un type d'adhésion",
+                  })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
+                >
+                  <option value="">Choisir...</option>
+                  <option value="Adhésion standard">
+                    Adhésion standard - 30€/an
+                  </option>
+                  <option value="Adhésion bienfaiteur">
+                    Adhésion bienfaiteur
+                  </option>
+                </select>
+                {errors.typeOfAdhesion && (
+                  <p className="mt-1 pl-1 text-left text-xs text-red-500">
+                    {errors.typeOfAdhesion.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Montant */}
+              <div className="mb-5">
+                <label className="mb-2 block text-sm text-gray-500">
+                  Montant (€)
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  {...register("amount", {
+                    required: "Montant requis",
+                    min: {
+                      value: 1,
+                      message: "Le montant doit être au moins 1€",
+                    },
+                    valueAsNumber: true,
+                  })}
+                  placeholder="30"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
+                />
+                {errors.amount && (
+                  <p className="mt-1 pl-1 text-left text-xs text-red-500">
+                    {errors.amount.message}
+                  </p>
+                )}
+              </div>
+
+              {/* Mode de paiement */}
+              <div className="mb-5">
+                <label className="mb-2 block text-sm text-gray-500">
+                  Mode de paiement
+                </label>
+                <select
+                  {...register("paymentMethod", {
+                    required: "Veuillez choisir un mode de paiement",
+                  })}
+                  className="w-full rounded-lg border border-gray-300 px-3 py-3 text-sm outline-none transition-colors focus:border-blue-500"
+                >
+                  <option value="">Choisir...</option>
+                    <option value="Card">Carte bancaire</option>
+                </select>
+                {errors.paymentMethod && (
+                  <p className="mt-1 pl-1 text-left text-xs text-red-500">
+                    {errors.paymentMethod.message}
+                  </p>
+                )}
               </div>
 
               {/* CGU */}
@@ -260,9 +356,10 @@ const Adhesion = () => {
 
               <button
                 type="submit"
-                className="w-full cursor-pointer rounded-lg bg-blue-600 py-3.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_20px_rgba(37,99,235,0.3)]"
+                disabled={isSubmitting}
+                className="w-full cursor-pointer rounded-lg bg-blue-600 py-3.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-blue-500 hover:shadow-[0_10px_20px_rgba(37,99,235,0.3)] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Devenir adhérent
+                {isSubmitting ? "Envoi en cours…" : "Devenir adhérent"}
               </button>
             </form>
           </div>

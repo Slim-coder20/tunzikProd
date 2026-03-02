@@ -3,6 +3,7 @@ import Adhesion from "../models/Adhesion.js";
 import { getAdhesionUserHtml } from "../template/adhesionUserTemplate.js";
 import { getAdhesionAdminHtml } from "../template/adhesionAdminTemplate.js";
 
+// Création d'une nouvelle adhésion : Post request à /api/adhesion
 export const createAdhesion = async (req, res) => {
   try {
     const {
@@ -112,6 +113,7 @@ export const createAdhesion = async (req, res) => {
 };
 
 // Récupération de toutes les adhésions pour l'espace admin //
+// Get request à /api/adhesion
 export const getAllAdhesion = async (req, res) => {
   try {
     const adhesions = await Adhesion.find();
