@@ -7,7 +7,7 @@ const orderSchema = new mongoose.Schema({
       albumId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Albums",
-        required: true,
+        required: false, // peut être null si panier côté client sans _id MongoDB
       },
       title: {
         type: String,

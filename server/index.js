@@ -1,7 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import "./loadEnv.js";
 
-import express from 'express';
+import express from "express";
+import { handleStripeWebhook } from "./controllers/stripeController.js";
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { connectMongo } from './DB/mongoDB.js';
@@ -10,11 +10,18 @@ import newsLetterRouter from './routes/newsLetterRoute.js';
 import artistesRouter from './routes/artistesRoute.js';
 import albumsRouter from './routes/albumsRoute.js';
 import { createAdhesion, getAllAdhesion } from './controllers/adhesionController.js';
+import stripeRouter from './routes/stripeRoute.js';
 
 /**
  * Initialize Express App
  */
 const app = express();
+
+
+// Webhook Stripe : body brut obligatoire 
+app.post("/api/webhooks/stripe", express.raw({type: "application/json"}),
+handleStripeWebhook
+);
 
 /**
  * Middleware
@@ -34,6 +41,9 @@ connectMongo();
 // Adhésion : routes enregistrées directement sur app (évite tout souci de montage)
 app.post('/api/adhesion', createAdhesion);
 app.get('/api/adhesion', getAllAdhesion);
+
+// Stripe : création des sessions Checkout (panier + adhésion)
+app.use('/api/stripe', stripeRouter);
 
 // Autres routes API
 app.use('/api/contact', contactRouter);
