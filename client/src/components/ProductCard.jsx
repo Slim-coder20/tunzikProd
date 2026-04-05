@@ -1,15 +1,53 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { albums } from "../data/albums";
+import { albumsService } from "../services/albumsService.js";
 
 export default function ProductCard() {
   const { addToCart, cartItems } = useCart();
   const navigate = useNavigate();
 
+  // les states //
+  const [albums, setAlbums] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // UseEffect //
+  useEffect(() => {
+    albumsService
+      .getAll()
+      .then(setAlbums)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
+
   const handleBuyNow = (album) => {
     addToCart(album.id);
     navigate("/cart");
   };
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-8 text-center text-slate-500">
+        Chargement des albums…
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-8 text-center text-red-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (!albums.length) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-8 text-center text-slate-500">
+        Aucun album pour le moment.
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
