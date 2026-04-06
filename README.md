@@ -10,8 +10,8 @@ Le projet est organisé en monorepo avec deux dossiers distincts :
 
 ```
 tunzikProd/
-├── client/   # Frontend React
-└── server/   # Backend Node.js / Express
+├── client/          # Frontend React (+ Dockerfile)
+└── server/          # Backend Node.js / Express (+ Dockerfile, .dockerignore)
 ```
 
 ---
@@ -50,6 +50,7 @@ tunzikProd/
 - **Node.js** ≥ 18
 - **npm** ≥ 9
 - **MongoDB** (local ou [MongoDB Atlas](https://www.mongodb.com/atlas))
+- **Docker** (Docker Engine ou Docker Desktop, optionnel) — pour exécuter le client et le serveur en conteneurs
 
 ---
 
@@ -93,12 +94,62 @@ EMAIL_PASS=votre_mot_de_passe_app
 
 ---
 
+## Conteneurisation (Docker)
+
+Chaque partie du monorepo dispose de son propre **`Dockerfile`**. Les images sont pensées pour **valider le fonctionnement en conteneur** (client en mode développement Vite, API en mode `node` via `npm run start`).
+
+| Service | Image de base | Port exposé | Commande par défaut |
+|---------|---------------|-------------|---------------------|
+| **client** | `node:22-alpine` | **5173** | `npm run dev` avec `--host 0.0.0.0` (accès depuis l’hôte) |
+| **server** | `node:22-alpine` | **3000** | `npm run start` (`node index.js`) |
+
+Le dossier **`server/.dockerignore`** exclut notamment `node_modules`, `.git` et **`.env`** : les secrets ne sont pas copiés dans l’image ; il faut les fournir au **lancement** du conteneur.
+
+### Client (frontend)
+
+Depuis la racine du dépôt :
+
+```bash
+docker build -t tunzik-client ./client
+docker run --rm -p 5173:5173 tunzik-client
+```
+
+Puis ouvrir **http://localhost:5173**.
+
+### Server (backend)
+
+Le `Dockerfile` définit **`ENV PORT=3000`**. Tu peux laisser ce port ou le surcharger via ton fichier `.env` passé au conteneur.
+
+```bash
+docker build -t tunzik-server ./server
+docker run --rm -p 3000:3000 --env-file server/.env tunzik-server
+```
+
+Adapter **`--env-file`** si tu lances la commande depuis le dossier `server/` : `--env-file .env`.
+
+Le backend doit pouvoir joindre MongoDB (URI réseau accessible depuis le conteneur, par ex. Atlas ou `host.docker.internal` en local selon ta plateforme).
+
+### Résumé des commandes utiles
+
+```bash
+# Construire les deux images
+docker build -t tunzik-client ./client
+docker build -t tunzik-server ./server
+
+# Lancer en parallèle (deux terminaux ou arrière-plan)
+docker run --rm -p 5173:5173 tunzik-client
+docker run --rm -p 3000:3000 --env-file server/.env tunzik-server
+```
+
+---
+
 ## Structure détaillée
 
 ### Client
 
 ```
 client/
+├── Dockerfile                  # Image de développement (Vite)
 ├── public/                     # Assets statiques (servis à la racine /)
 │   ├── favicon.png
 │   ├── artistes/               # Photos des artistes
@@ -135,6 +186,8 @@ client/
 
 ```
 server/
+├── Dockerfile                  # Image API (npm run start)
+├── .dockerignore               # Exclut node_modules, .env, etc.
 ├── config/                     # Configuration (DB, etc.)
 ├── controllers/                # Logique métier
 ├── routes/                     # Définition des routes API
