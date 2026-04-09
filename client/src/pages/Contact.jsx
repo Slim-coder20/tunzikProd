@@ -185,7 +185,7 @@ const Contact = () => {
 
           <div className="rounded-3xl p-10 relative min-h-[662px] w-full max-w-[520px] hidden md:flex flex-col justify-between overflow-hidden">
             <img
-              src={"../public/favicon.png"}
+              src={`${import.meta.env.BASE_URL}favicon.png`}
               alt="3D shapes"
               className="absolute inset-0 w-full h-full object-cover"
             />

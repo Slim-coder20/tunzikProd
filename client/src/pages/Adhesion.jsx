@@ -87,7 +87,7 @@ const Adhesion = () => {
           au spectacle vivant et aux artistes émergents.
         </p>
       </section>
-
+      {/* Section du formulaire */}
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="grid gap-12 md:grid-cols-2 md:gap-16 lg:gap-24">
           {/* Formulaire */}

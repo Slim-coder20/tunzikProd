@@ -3,6 +3,20 @@ import { useParams, NavLink } from "react-router-dom";
 import { Facebook, Instagram, Youtube, ArrowLeft, Play, Pause, MapPin, Music } from "lucide-react";
 import { artistesService } from "../services/artistesService";
 
+/**
+ * Détails d'un artiste (page de consultation).
+ *
+ * Objectif “dossier professionnel” :
+ * - montrer un écran de détail alimenté par un paramètre de route (`id`)
+ * - gérer les états UI (chargement / erreur / données)
+ * - proposer une UX riche (liens sociaux, discographie, preview audio)
+ *
+ * Ce composant reste volontairement "présentation + orchestration" :
+ * la récupération de données est déléguée à `artistesService`.
+ */
+
+// Table de correspondance "label -> icône" pour rendre la section sociale déclarative :
+// on évite des conditions dispersées dans le JSX et on centralise la config.
 const socialLinksConfig = [
   { icon: Facebook, label: "Facebook" },
   { icon: Instagram, label: "Instagram" },
@@ -10,14 +24,28 @@ const socialLinksConfig = [
 ];
 
 const ArtistDetails = () => {
+  // Paramètre dynamique provenant de l'URL (ex: /artistes/:id).
   const { id } = useParams();
+
+  // Données & états d'interface :
+  // - `artist` : ressource chargée depuis l'API
+  // - `loading` : contrôle l'affichage du spinner
+  // - `error` : déclenche l'écran d'erreur / “introuvable”
+  // - `playingId` : identifiant de l'album en cours de lecture (pour piloter l'UI Play/Pause)
   const [artist, setArtist] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [playingId, setPlayingId] = useState(null);
+
+  // Un seul élément <audio> partagé pour toutes les previews :
+  // - limite les ressources (un lecteur unique)
+  // - garantit une lecture exclusive (un seul extrait à la fois)
   const audioRef = useRef(null);
 
   useEffect(() => {
+    // Chargement du détail artiste à chaque changement d'id (navigation directe / refresh / lien).
+    // Le service encapsule la logique API (URL, headers, parsing), ce qui rend ce composant testable
+    // et centré sur l'expérience utilisateur.
     artistesService
       .getById(id)
       .then((data) => setArtist(data))
@@ -26,11 +54,16 @@ const ArtistDetails = () => {
   }, [id]);
 
   const togglePlay = (album) => {
+    // L'album peut exister sans preview (ex: API incomplète, extrait indisponible) :
+    // on protège l'action pour éviter une erreur et garder l'UI cohérente.
     if (!album.previewUrl) return;
+
+    // Si on reclique sur le même album : on met en pause et on réinitialise l'état.
     if (playingId === album._id) {
       audioRef.current.pause();
       setPlayingId(null);
     } else {
+      // Sinon : on bascule vers le nouvel album, on charge sa source, puis on lance la lecture.
       setPlayingId(album._id);
       audioRef.current.src = album.previewUrl;
       audioRef.current.play();
@@ -38,6 +71,7 @@ const ArtistDetails = () => {
   };
 
   if (loading) {
+    // État "chargement" : feedback immédiat pour éviter un écran vide.
     return (
       <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-500" />
@@ -46,6 +80,8 @@ const ArtistDetails = () => {
   }
 
   if (error || !artist) {
+    // État "erreur" ou "donnée absente" :
+    // un message clair + un chemin de retour (pattern UX de récupération).
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-50 px-4 text-center">
         <h1 className="text-3xl font-semibold text-slate-800">Artiste introuvable</h1>
@@ -63,6 +99,7 @@ const ArtistDetails = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Lecteur audio "global" au composant. Le onEnded synchronise l'UI quand l'extrait se termine. */}
       <audio ref={audioRef} onEnded={() => setPlayingId(null)} />
 
       {/* Hero */}
@@ -99,6 +136,9 @@ const ArtistDetails = () => {
               )}
 
               <div className="mt-6 flex gap-3">
+                {/* Liens sociaux : rendu à partir des données API.
+                    - mapping label -> icône via `socialLinksConfig`
+                    - `aria-label` + `rel` pour accessibilité et sécurité (target blank) */}
                 {artist.socialLinks.map((link) => {
                   const config = socialLinksConfig.find((c) => c.label === link.label);
                   const Icon = config?.icon;
@@ -152,6 +192,8 @@ const ArtistDetails = () => {
                     {album.previewUrl && (
                       <div
                         onClick={() => togglePlay(album)}
+                        // Survol / lecture : calque interactif qui expose le bouton Play/Pause.
+                        // On couple `playingId` à l'opacité pour refléter l'état de lecture.
                         className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity ${
                           playingId === album._id
                             ? "opacity-100"
