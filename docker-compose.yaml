@@ -1,0 +1,42 @@
+# Configuration docker compose pour orchestrer les services de l'application
+#
+# Usage (dev local) :
+#   docker compose up --build
+#
+# Notes :
+# - Le client est un Vite dev server exposé sur http://localhost:5173
+# - Le server API est exposé sur http://localhost:3000
+# - Le navigateur doit appeler l'API via localhost:3000 
+
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    environment:
+      # Assure un CORS cohérent en local
+      FRONTEND_URL: "http://localhost:5173"
+      # Optionnel : explicite en dev
+      NODE_ENV: "development"
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "5173:5173"
+    environment:
+      
+      VITE_API_URL: "http://localhost:3000"
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - server
